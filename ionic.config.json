@@ -1,0 +1,7 @@
+{
+  "name": "ParkingBrno",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
