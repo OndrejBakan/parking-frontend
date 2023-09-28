@@ -3,13 +3,14 @@ import { IonicModule } from '@ionic/angular';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { ApiService } from '../services/api.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
   standalone: true,
-  imports: [IonicModule, ExploreContainerComponent, CommonModule]
+  imports: [IonicModule, ExploreContainerComponent, CommonModule, RouterModule]
 })
 export class Tab2Page {
 

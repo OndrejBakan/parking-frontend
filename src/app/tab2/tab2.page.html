@@ -14,11 +14,12 @@
   </ion-header>
 
   <ion-list>
-    <ion-item *ngFor="let facility of facilities">
+    <ion-item *ngFor="let facility of facilities" [routerLink]="['/facilities', facility.id]">
       <ion-icon *ngIf="facility.latest_occupancy_record.spaces_public_percentages.spaces_public_vacant_percentage >= 75" style="color:green" slot="start" name="list-circle" size="large"></ion-icon>
       <ion-icon *ngIf="facility.latest_occupancy_record.spaces_public_percentages.spaces_public_vacant_percentage > 25 && facility.latest_occupancy_record.spaces_public_percentages.spaces_public_vacant_percentage < 75"  style="color:yellow" slot="start" name="list-circle" size="large"></ion-icon>
       <ion-icon *ngIf="facility.latest_occupancy_record.spaces_public_percentages.spaces_public_vacant_percentage <= 25" style="color:red" slot="start" name="list-circle" size="large"></ion-icon>
       <ion-label>{{ facility.name }}</ion-label>
+      <ion-note slot="end">{{ facility.latest_occupancy_record.spaces_public_vacant }} volných míst</ion-note>
     </ion-item>
   </ion-list>
 </ion-content>

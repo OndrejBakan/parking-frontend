@@ -16,9 +16,8 @@ export class ApiService {
   }
 
   fetchFacilities() {
-    console.log('fetching');
     return this.http
-      .get('http://127.0.0.1:8000/api/facility')
+      .get('http://127.0.0.1:8000/api/v1/facility')
       .pipe(
         tap(facilities => { this._facilities.next(facilities); })
       )
