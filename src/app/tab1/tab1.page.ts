@@ -33,7 +33,7 @@ export class Tab1Page {
   ngOnInit() {
 
     this.facilitiesSub = this.apiService.facilities.subscribe(facilities => {
-      this.updateFacilities(facilities);
+      this.updateFacilities(facilities.data);
     });
 
     this.map = new L.Map('map', {

@@ -27,7 +27,7 @@ export class Tab2Page {
   }
 
   updateFacilities(facilities: any) {
-    this.facilities = facilities;
+    this.facilities = facilities['data'];
   }
 
 }

@@ -19,7 +19,7 @@ export class ApiService {
     return this.http
       .get('http://127.0.0.1:8000/api/v1/facility')
       .pipe(
-        tap(facilities => { this._facilities.next(facilities); })
+        tap(response => { this._facilities.next(response); })
       )
       
   }

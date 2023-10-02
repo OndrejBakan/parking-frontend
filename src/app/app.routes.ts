@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { FacilityDetailPage } from './facilities/facility-detail/facility-detail.page';
 
 export const routes: Routes = [
   {
@@ -7,11 +6,11 @@ export const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
-    path: 'facilities',
-    // loadComponent: () => import('./facilities/facility-detail/facility-detail.page').then( m => m.FacilityDetailPage)
-    children: [
-      { path: ':id', component: FacilityDetailPage}
-    ]
+    path: 'facilities/:id',
+    loadComponent: () => import('./facilities/facility-detail/facility-detail.page').then((m) => m.FacilityDetailPage)
   },
-
+  {
+    path: 'test-page',
+    loadComponent: () => import('./test-page/test-page.page').then( m => m.TestPagePage)
+  },
 ];
