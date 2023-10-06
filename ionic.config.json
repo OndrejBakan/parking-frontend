@@ -1,0 +1,7 @@
+{
+  "name": "parking-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

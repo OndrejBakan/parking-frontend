@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>A</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-buttons><ion-back-button></ion-back-button></ion-buttons>
+      
+      <ion-title size="large">faciAlist</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-item *ngFor="let facility of facilities" [routerLink]="['/', 'facility', facility.id]">
+      <ion-label>{{ facility.name }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
