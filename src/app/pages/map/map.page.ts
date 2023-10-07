@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { FacilityService } from '../../services/facility.service';
 import * as L from 'leaflet';
+import { FacilityDetailComponent } from '../../components/facility/facility-detail/facility-detail.component';
 
 @Component({
   selector: 'app-map',
@@ -19,7 +20,9 @@ export class MapPage implements OnInit {
   mapZoom!: number;
   facilities: any;
 
-  constructor(private facilityService: FacilityService) {}
+  constructor(
+    private facilityService: FacilityService,
+    private modalCtrl: ModalController) {}
 
   ngOnInit(): void {
     // init map
@@ -97,6 +100,20 @@ export class MapPage implements OnInit {
           'Volná místa pro veřejnost: ' + facility.latest_occupancy_record.spaces_public_vacant + '/' + spaces_public_total
           )
         .addTo(this.map);
+
+      facilityMarker.addEventListener('click', (e: any) => {
+        console.log(facility.id);
+        this.modalCtrl.create({
+            component: FacilityDetailComponent,
+            componentProps: {id: facility.id},
+            breakpoints: [0, 0.5, 1],
+            initialBreakpoint: 0.5,
+            handle: true,
+            handleBehavior: 'none',
+          }).then((modal) => {
+            modal.present();
+        } );
+      })
     
       facilityMarker.addTo(facilitiesLayer);
     });

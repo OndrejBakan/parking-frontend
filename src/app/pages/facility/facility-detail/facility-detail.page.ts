@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';
+import { IonicModule, LoadingController, NavController } from '@ionic/angular';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { Chart } from 'chart.js/auto';
@@ -15,41 +15,52 @@ import { FacilityService } from '../../../services/facility.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class FacilityDetailPage implements OnInit, OnDestroy {
+  loading = false;
   id: any;
   id$: any;
   facility: any;
   facility$: any;
+  selectedDayOfWeek: number;
+  chart!: Chart;
   
   constructor(private route: ActivatedRoute,
     private facilityService: FacilityService,
-    private navCtrl: NavController) { }
+    private loadingCtrl: LoadingController) {
+      this.selectedDayOfWeek = new Date().getDay();
+    }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((paramMap) => {
-      this.id = paramMap.get('id');
-      console.log(paramMap);
-      console.log(this.navCtrl);
-    })
+    // get ID from route and fetch facility from API
+    this.id$ = this.route.paramMap.subscribe((params: ParamMap) => {
+      this.id = params.get('id');
+      this.facility$ = this.facilityService.getFacility(this.id).subscribe((facility: any) => {
+        this.facility = facility.data;
+        this.updateChart();
+      });
+    });
+
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.id$.unsubscribe();
     this.facility$.unsubscribe();
   }
 
-  updateFacility(response: any) {
-    this.facility = response.data;
-    this.updateChart();
+  dayOfWeekSelectionChanged(event: any) {
+    this.selectedDayOfWeek = event.detail.value;
+    this.chart.data.labels = this.facility.popular_times[this.selectedDayOfWeek].map((row: any) => row.hour_of_day);
+    this.chart.data.datasets[0].data = this.facility.popular_times[this.selectedDayOfWeek].map((row: any) => row.occupancy_percentage);
+    this.chart.update();
   }
 
   updateChart() {
-    var myChart = new Chart("myChart", {
+    this.chart = new Chart("myChart", {
       type: 'bar',
       data: {
-        labels: this.facility.popular_times[1].map((row: any) => row.hour_of_day),
+        labels: this.facility.popular_times[this.selectedDayOfWeek].map((row: any) => row.hour_of_day),
         datasets: [{
-          label: 'Obsazenost',
-          data: this.facility.popular_times[1].map((row: any) => row.occupancy_percentage),
+          label: 'Obsazenost [%]',
+          data: this.facility.popular_times[this.selectedDayOfWeek].map((row: any) => row.occupancy_percentage),
           borderWidth: 1
         }]
       },

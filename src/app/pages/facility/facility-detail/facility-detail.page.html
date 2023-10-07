@@ -1,29 +1,41 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/home/list"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ this.id }}</ion-title>
+    <ion-title>{{ facility?.name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Facility Detail {{ this.id }}</ion-title>
+      <ion-title size="large">{{ facility?.name }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-card>
     <ion-card-header>
       <ion-card-title>Průměrná obsazenost</ion-card-title>
-      <ion-card-subtitle>A</ion-card-subtitle>
     </ion-card-header>
-  
+
     <ion-card-content>
       <div id="divChart">
         <canvas id="myChart"></canvas>
-    </div>
+      </div>
+      <ion-select
+        label-placement="floating"
+        fill="outline"
+        [value]="selectedDayOfWeek.toString()"
+        (ionChange)="dayOfWeekSelectionChanged($event)">
+        <ion-select-option value="1">Pondělí</ion-select-option>
+        <ion-select-option value="2">Úterý</ion-select-option>
+        <ion-select-option value="3">Středa</ion-select-option>
+        <ion-select-option value="4">Čtvrtek</ion-select-option>
+        <ion-select-option value="5">Pátek</ion-select-option>
+        <ion-select-option value="6">Sobota</ion-select-option>
+        <ion-select-option value="0">Neděle</ion-select-option>
+      </ion-select>
     </ion-card-content>
   </ion-card>
 </ion-content>

@@ -3,7 +3,7 @@ import { HomePage } from './pages/home/home.page';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     component: HomePage,
     loadChildren: () => import('./pages/home/home.routes').then((m) => m.routes)
   },
