@@ -51,6 +51,8 @@ export class MapPage implements OnInit {
   }
 
   facilitiesUpdated(facilities: any) {
+
+    console.log(facilities);
     
     const facilitiesLayer = new L.FeatureGroup().addTo(this.map);
 

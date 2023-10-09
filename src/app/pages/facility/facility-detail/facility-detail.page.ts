@@ -6,13 +6,14 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { Chart } from 'chart.js/auto';
 import { FacilityService } from '../../../services/facility.service';
+import { DateAgoPipe } from 'src/app/pipes/date-ago.pipe';
 
 @Component({
   selector: 'app-facility-detail',
   templateUrl: './facility-detail.page.html',
   styleUrls: ['./facility-detail.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, DateAgoPipe]
 })
 export class FacilityDetailPage implements OnInit, OnDestroy {
   id: any;
