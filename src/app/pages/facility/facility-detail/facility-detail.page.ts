@@ -15,7 +15,6 @@ import { FacilityService } from '../../../services/facility.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class FacilityDetailPage implements OnInit, OnDestroy {
-  loading = false;
   id: any;
   id$: any;
   facility: any;
@@ -29,21 +28,27 @@ export class FacilityDetailPage implements OnInit, OnDestroy {
       this.selectedDayOfWeek = new Date().getDay();
     }
 
-  ngOnInit() {
-    // get ID from route and fetch facility from API
-    this.id$ = this.route.paramMap.subscribe((params: ParamMap) => {
-      this.id = params.get('id');
-      this.facility$ = this.facilityService.getFacility(this.id).subscribe((facility: any) => {
-        this.facility = facility.data;
-        this.updateChart();
+  async ngOnInit() {
+    if (! this.id ) {
+      // get ID from route and fetch facility from API
+      this.id$ = this.route.paramMap.subscribe((params: ParamMap) => {
+        this.id = params.get('id');
       });
+    }
+    
+    this.facilityService.getFacility(this.id).subscribe(async (facility: any) => {
+      this.facility = facility.data;
+      this.updateChart();
     });
 
   }
 
   ngOnDestroy(): void {
-    this.id$.unsubscribe();
-    this.facility$.unsubscribe();
+    if (this.id$)
+      this.id$.unsubscribe();
+
+    if (this.facility$)
+      this.facility$.unsubscribe();
   }
 
   dayOfWeekSelectionChanged(event: any) {

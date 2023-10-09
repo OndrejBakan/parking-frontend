@@ -16,6 +16,20 @@
 
   <ion-card>
     <ion-card-header>
+      <ion-card-title>Aktuální obsazenost</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="vacant">{{ facility?.latest_occupancy_record.spaces_public_vacant }}<br/>volno</ion-col>
+          <ion-col class="occupied">{{ facility?.latest_occupancy_record.spaces_public_occupied }}<br/>obsazeno</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
       <ion-card-title>Průměrná obsazenost</ion-card-title>
     </ion-card-header>
 

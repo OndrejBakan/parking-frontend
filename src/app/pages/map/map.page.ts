@@ -5,6 +5,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { FacilityService } from '../../services/facility.service';
 import * as L from 'leaflet';
 import { FacilityDetailComponent } from '../../components/facility/facility-detail/facility-detail.component';
+import { FacilityDetailPage } from '../facility/facility-detail/facility-detail.page';
 
 @Component({
   selector: 'app-map',
@@ -89,22 +90,16 @@ export class MapPage implements OnInit {
         var icon = yellowIcon;
       }
       
-      var spaces_public_total = Number(facility.latest_occupancy_record.spaces_public_vacant) + Number(facility.latest_occupancy_record.spaces_public_occupied);
+      var spacesPublicTotal = Number(facility.latest_occupancy_record.spaces_public_vacant) + Number(facility.latest_occupancy_record.spaces_public_occupied);
 
       const facilityMarker = L.marker([
         facility.latitude,
         facility.longitude,
-      ], {icon: icon})
-        .bindPopup(
-          '<b>' + facility.name + '</b><br>' +
-          'Volná místa pro veřejnost: ' + facility.latest_occupancy_record.spaces_public_vacant + '/' + spaces_public_total
-          )
-        .addTo(this.map);
+      ], {icon: icon}).addTo(this.map);
 
       facilityMarker.addEventListener('click', (e: any) => {
-        console.log(facility.id);
         this.modalCtrl.create({
-            component: FacilityDetailComponent,
+            component: FacilityDetailPage,
             componentProps: {id: facility.id},
             breakpoints: [0, 0.5, 1],
             initialBreakpoint: 0.5,
