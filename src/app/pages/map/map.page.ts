@@ -49,15 +49,7 @@ export class MapPage implements OnInit {
 
   ionViewWillEnter() {
     this.map.invalidateSize();
-
-    if (!this.lastUpdated || Date.now() > this.lastUpdated.getTime() + 60 * 1000) {
-      this.fetchData();
-    }
-        
-    // // fetch facilities
-    // this.facilityService.getFacilities().subscribe({
-    //   next: (response) => this.facilitiesUpdated(response),
-    // });
+    this.fetchData();
   }
 
   facilitiesUpdated(facilities: any) {
@@ -136,6 +128,10 @@ export class MapPage implements OnInit {
   }
 
   async fetchData() {
+    if (this.lastUpdated && Date.now() < this.lastUpdated.getTime() + 60 * 1000) {
+      	return;
+    }
+
     let loading = this.loadingCtrl.create({
       'message': 'Loading...'
     });
