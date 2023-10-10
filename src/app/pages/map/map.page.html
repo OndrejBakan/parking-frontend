@@ -1,7 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Mapa parkovišť</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="fetchData()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+  
 </ion-header>
 
 <ion-content [fullscreen]="true">

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, LoadingController, ModalController } from '@ionic/angular';
 import { FacilityService } from '../../services/facility.service';
 import * as L from 'leaflet';
 import { FacilityDetailComponent } from '../../components/facility/facility-detail/facility-detail.component';
@@ -19,13 +19,16 @@ export class MapPage implements OnInit {
   map: any;
   mapCenter!: [0, 0];
   mapZoom!: number;
+  facilities$: any;
   facilities: any;
 
   constructor(
     private facilityService: FacilityService,
-    private modalCtrl: ModalController) {}
+    private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController) {}
 
   ngOnInit(): void {
+    this.facilities$ = this.facilityService.getFacilities();
     // init map
     this.map = new L.Map('map', {
       center: this.mapCenter,
@@ -39,20 +42,20 @@ export class MapPage implements OnInit {
     });
 
     L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=buz9V2TEnLc5pz9oiKtL3Kwr3Wiwff0B4UviYkIZ4hzis4JnYIEabxS7bbE4tFpO', {}).addTo(this.map);
+
+    this.fetchData();
   }
 
   ionViewWillEnter() {
     this.map.invalidateSize();
     
-    // fetch facilities
-    this.facilityService.getFacilities().subscribe({
-      next: (response) => this.facilitiesUpdated(response),
-    });
+    // // fetch facilities
+    // this.facilityService.getFacilities().subscribe({
+    //   next: (response) => this.facilitiesUpdated(response),
+    // });
   }
 
   facilitiesUpdated(facilities: any) {
-
-    console.log(facilities);
     
     const facilitiesLayer = new L.FeatureGroup().addTo(this.map);
 
@@ -125,5 +128,21 @@ export class MapPage implements OnInit {
     this.map.fitBounds(
       facilitiesLayer.getBounds().extend(L.latLngBounds(symmetricSw, symmetricNe)),
       {padding: [50, 50]});
+  }
+
+  async fetchData() {
+    let loading = this.loadingCtrl.create({
+      'message': 'Loading...'
+    });
+
+    (await loading).present();
+
+    // fetch facilities
+    this.facilityService.getFacilities().subscribe({
+      next: async (response) => {
+        this.facilitiesUpdated(response);
+        (await loading).dismiss();
+      },
+    });
   }
 }
