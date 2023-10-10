@@ -132,7 +132,7 @@ export class MapPage implements OnInit {
     }
 
     let loading = this.loadingCtrl.create({
-      'message': 'Loading...'
+      'message': 'Načítání...'
     });
 
     (await loading).present();

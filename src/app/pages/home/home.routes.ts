@@ -1,15 +1,13 @@
-import { Routes, RouterModule } from '@angular/router';
-import { HomePage } from './home.page';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     {
       path: '',
       pathMatch: 'full',
-      redirectTo: 'home',
+      redirectTo: 'map',
     },
     {
       path: 'map',
-      // loadComponent: () => import('../pages/map/map.page').then((m) => m.MapPage),
       loadComponent: () => import('../map/map.page').then((m) => m.MapPage)
     },
     {

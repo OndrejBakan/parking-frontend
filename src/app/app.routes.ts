@@ -14,5 +14,10 @@ export const routes: Routes = [
   {
     path: 'facility/:id',
     loadComponent: () => import('./pages/facility/facility-detail/facility-detail.page').then((m) => m.FacilityDetailPage)
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: '/home/map'
   }
 ];
