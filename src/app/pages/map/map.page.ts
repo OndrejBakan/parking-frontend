@@ -21,6 +21,7 @@ export class MapPage implements OnInit {
   mapZoom!: number;
   facilities$: any;
   facilities: any;
+  lastUpdated!: Date;
 
   constructor(
     private facilityService: FacilityService,
@@ -48,7 +49,11 @@ export class MapPage implements OnInit {
 
   ionViewWillEnter() {
     this.map.invalidateSize();
-    
+
+    if (!this.lastUpdated || Date.now() > this.lastUpdated.getTime() + 60 * 1000) {
+      this.fetchData();
+    }
+        
     // // fetch facilities
     // this.facilityService.getFacilities().subscribe({
     //   next: (response) => this.facilitiesUpdated(response),
@@ -140,6 +145,7 @@ export class MapPage implements OnInit {
     // fetch facilities
     this.facilityService.getFacilities().subscribe({
       next: async (response) => {
+        this.lastUpdated = new Date();
         this.facilitiesUpdated(response);
         (await loading).dismiss();
       },
