@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Mapa parkovišť</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="fetchData()">
+      <ion-button (click)="fetchData()" [disabled]="refreshButtonDisabled">
         <ion-icon name="refresh"></ion-icon>
       </ion-button>
     </ion-buttons>

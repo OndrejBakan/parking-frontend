@@ -26,4 +26,8 @@ export class FacilityListPage implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    if (this.facilities$)
+      this.facilities$.unsubscribe();
+  }
 }

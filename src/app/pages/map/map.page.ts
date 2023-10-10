@@ -22,6 +22,7 @@ export class MapPage implements OnInit {
   facilities$: any;
   facilities: any;
   lastUpdated!: Date;
+  refreshButtonDisabled: boolean = false;
 
   constructor(
     private facilityService: FacilityService,
@@ -142,6 +143,10 @@ export class MapPage implements OnInit {
     this.facilityService.getFacilities().subscribe({
       next: async (response) => {
         this.lastUpdated = new Date();
+        this.refreshButtonDisabled = true;
+        setTimeout(() => {
+          this.refreshButtonDisabled = false;
+        }, 60 * 1000);
         this.facilitiesUpdated(response);
         (await loading).dismiss();
       },
