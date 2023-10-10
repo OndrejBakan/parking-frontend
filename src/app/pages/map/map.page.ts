@@ -44,8 +44,6 @@ export class MapPage implements OnInit {
     });
 
     L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=buz9V2TEnLc5pz9oiKtL3Kwr3Wiwff0B4UviYkIZ4hzis4JnYIEabxS7bbE4tFpO', {}).addTo(this.map);
-
-    this.fetchData();
   }
 
   ionViewWillEnter() {
