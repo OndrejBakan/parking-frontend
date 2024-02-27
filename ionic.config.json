@@ -1,0 +1,7 @@
+{
+  "name": "parking-rewrite",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
