@@ -23,22 +23,24 @@ export class MapPage implements OnInit {
   mapCenter!: [0, 0];
   mapZoom!: 16;
   presentingElement: any;
+  selectedFacility: any;
+  isModalOpen: boolean = false;
 
   constructor(
     private api: ApiService,
     private modalCtrl: ModalController,
-    private loadingCtrl: LoadingController) {}
+    private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('ion-content')?.closest('.ion-page');
     // init map
     this.map = new L.Map('map', {
-      center: [49,16],
+      center: [49, 16],
       zoom: 16,
       zoomControl: false
     });
 
-    this.map.on('moveend', function(this: MapPage, e: any) {
+    this.map.on('moveend', function (this: MapPage, e: any) {
       this.mapCenter = e.target.getCenter();
       this.mapZoom = e.target.getZoom();
     });
@@ -88,24 +90,30 @@ export class MapPage implements OnInit {
     });
 
     facilities.features.forEach((facility: any) => {
-
       console.log(facility);
 
-      const facilityMarker = L.marker([facility.geometry.coordinates[1], facility.geometry.coordinates[0]], {'icon': greenIcon}).addTo(this.map);
+      const facilityMarker = L.marker([
+        facility.geometry.coordinates[1],
+        facility.geometry.coordinates[0]],
+        { 'icon': greenIcon });
 
-/*      facilityMarker.addEventListener('click', (e: any) => {
-        this.modalCtrl.create({
-            component: FacilityDetailPage,
-            componentProps: {id: facility.id},
-            breakpoints: [0, 0.5, 1],
-            initialBreakpoint: 0.5,
-            handle: true,
-            handleBehavior: 'none',
-          }).then((modal) => {
-            modal.present();
-        } );
-      }); */
-    
+      /*      facilityMarker.addEventListener('click', (e: any) => {
+              this.modalCtrl.create({
+                  component: FacilityDetailPage,
+                  componentProps: {id: facility.id},
+                  breakpoints: [0, 0.5, 1],
+                  initialBreakpoint: 0.5,
+                  handle: true,
+                  handleBehavior: 'none',
+                }).then((modal) => {
+                  modal.present();
+              } );
+            }); */
+      facilityMarker.addEventListener('click', (e: any) => {
+        this.selectedFacility = facility;
+        this.isModalOpen = true;
+        console.log(this.selectedFacility);
+      });
       facilityMarker.addTo(facilitiesLayer);
     });
 
@@ -113,12 +121,17 @@ export class MapPage implements OnInit {
     let ne = facilitiesLayer.getBounds().getNorthEast();
     let sw = facilitiesLayer.getBounds().getSouthWest();
 
-    let symmetricNe: L.LatLngTuple = [ne.lat + (49.195278 - ne.lat)*2, ne.lng + (16.608333 - ne.lng)*2];
-    let symmetricSw: L.LatLngTuple = [sw.lat + (49.195278 - sw.lat)*2, sw.lng + (16.608333 - sw.lng)*2];
+    let symmetricNe: L.LatLngTuple = [ne.lat + (49.195278 - ne.lat) * 2, ne.lng + (16.608333 - ne.lng) * 2];
+    let symmetricSw: L.LatLngTuple = [sw.lat + (49.195278 - sw.lat) * 2, sw.lng + (16.608333 - sw.lng) * 2];
 
     this.map.fitBounds(
       facilitiesLayer.getBounds().extend(L.latLngBounds(symmetricSw, symmetricNe)),
-      {padding: [50, 50]});
+      { padding: [10, 10] });
+  }
+
+  onIonModalDidDismiss(event: any) {
+    console.log(event);
+    this.isModalOpen = false;
   }
 
   async fetchData() {
