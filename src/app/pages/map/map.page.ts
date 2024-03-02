@@ -1,11 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { Observable } from 'rxjs';
 import * as L from 'leaflet';
-import { LoadingController, ModalController } from '@ionic/angular/standalone';
+import { LoadingController, ModalController, Platform } from '@ionic/angular/standalone';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-map',
@@ -26,10 +27,15 @@ export class MapPage implements OnInit {
   selectedFacility: any;
   isModalOpen: boolean = false;
 
+  @ViewChild('header', { read: ElementRef }) header: ElementRef | undefined
+
   constructor(
     private api: ApiService,
+    private loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
-    private loadingCtrl: LoadingController) { }
+    private platform: Platform,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('ion-content')?.closest('.ion-page');
@@ -110,9 +116,34 @@ export class MapPage implements OnInit {
               } );
             }); */
       facilityMarker.addEventListener('click', (e: any) => {
+        console.log(this.map);
         this.selectedFacility = facility;
         this.isModalOpen = true;
-        console.log(this.selectedFacility);
+
+        let centerInPx = this.map.latLngToContainerPoint(new L.LatLng(
+          this.selectedFacility.geometry.coordinates[1],
+          this.selectedFacility.geometry.coordinates[0]
+        ));
+
+        let modalHeight = (this.platform.height() - 10) / 2;
+
+        console.log(centerInPx.y, modalHeight, modalHeight / 2);
+        let newCenterInPx = {
+          x: centerInPx.x,
+          y: centerInPx.y + 20,
+        };
+        console.log(newCenterInPx);
+
+        let newCenterInCoords = this.map.containerPointToLatLng({x: 0, y:0});
+        this.map.flyTo(newCenterInCoords, 16);
+
+        console.log(centerInPx);
+        
+        
+        let center = this.platform.height() - modalHeight / 2;
+
+        console.log("Center", this.platform.height() / 2);
+        console.log("Center with 0.5", 56 + (this.platform.height() - modalHeight * 0.5) / 2);
       });
       facilityMarker.addTo(facilitiesLayer);
     });
@@ -132,6 +163,9 @@ export class MapPage implements OnInit {
   onIonModalDidDismiss(event: any) {
     console.log(event);
     this.isModalOpen = false;
+  }
+
+  onIonBreakpointDidChange(event: any) {
   }
 
   async fetchData() {
